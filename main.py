@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import sqlite3
 from datasets import load_dataset
+from evaluate import evaluate_model_output
 
 API_URL = "https://api-inference.huggingface.co/models/bigcode/starcoderbase-1b?wait_for_model=true"
 headers = {"Authorization": "Bearer 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"}
@@ -43,4 +44,4 @@ df = pd.DataFrame(rows)
 df.to_csv("humaneval_output.csv", index=False )
 
 conn = sqlite3.connect("humaneval.db")
-df.to_sql("results", conn, if_exists="append", index=False)
+df.to_sql("results", conn, if_exists="replace", index=False)
