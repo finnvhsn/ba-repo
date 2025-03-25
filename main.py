@@ -2,7 +2,6 @@ import requests
 import pandas as pd
 import sqlite3
 from datasets import load_dataset
-from evaluate import evaluate_model_output
 
 API_URL = "https://api-inference.huggingface.co/models/bigcode/starcoderbase-1b?wait_for_model=true"
 headers = {"Authorization": "Bearer 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"}
