@@ -1,3 +1,5 @@
+DATASET_NAME = "mbpp"
+SPLIT = "test"
 PROMPT_TEMPLATE = """
 ONLY return valid Python code.
 Do NOT use code blocks like ``` or markdown.
@@ -13,3 +15,9 @@ Remember:
 - Do NOT include comments.
 - Do NOT include anything except the Python function code.
 """
+FIELDS = {
+    "task_id": "task_id",
+    "text": "text",
+    "solution": "code",
+    "test": "test_list"
+}
