@@ -20,6 +20,10 @@ def run_code(q, full_code, func_name):
         q.put("failed")
     except Exception as e:
         q.put(f"error: {type(e).__name__}")
+        
+import re
+def rename_to_candidate(code: str) -> str:
+    return re.sub(r"def\s+\w+\s*\(", "def candidate(", code, count=1)
 
 def safe_exec(full_code, func_name, timeout=3):
     q = multiprocessing.Queue()
@@ -31,19 +35,11 @@ def safe_exec(full_code, func_name, timeout=3):
         return "error: timeout"
     return q.get() if not q.empty() else "error: unknown"
 
-def extract_function_name(prompt: str) -> str:
-    for line in prompt.splitlines():
-        line = line.strip()
-        if line.startswith("def "):
-            name_part = line.split("(")[0]
-            return name_part.replace("def ", "").strip()
-    return None
-
-def evaluate_model_output(prompt, model_output, test_code):
+def evaluate_model_output(model_output, test_code):
     prelude = "from typing import List, Dict, Tuple, Optional, Any\n"
+    model_output = rename_to_candidate(model_output)
     full_code = prelude + "\n" + model_output + "\n" + test_code
-    func_name = extract_function_name(prompt)
-    return safe_exec(full_code, func_name)
+    return safe_exec(full_code, "candidate")
 
 # 🔹 Hauptausführung
 if __name__ == "__main__":
@@ -63,7 +59,6 @@ if __name__ == "__main__":
     results = []
     for _, row in df.iterrows():
         result = evaluate_model_output(
-            row["prompt"],
             row["model_output"],
             row["test_code"]
         )
