@@ -32,3 +32,5 @@ llama 3.3 70.6b URL: https://ollama.com/library/llama3.3:latest
 
 Temperature: 0.0
 
+for pulling models:
+bash: python pull_model.py --model starcoder2:15b --host 10.1.25.121
