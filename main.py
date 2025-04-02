@@ -4,12 +4,15 @@ import argparse
 import sqlite3
 import pandas as pd
 
+
 def load_local_dataset(json_path):
     with open(json_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 from common.query import query
 import importlib
+
 
 def run_benchmark(dataset_config, models, num_samples=10):
     model_results = {}
@@ -38,6 +41,7 @@ def run_benchmark(dataset_config, models, num_samples=10):
         model_results[model_name] = results
     return model_results
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run LLM benchmark.")
     parser.add_argument("--dataset", type=str, required=True, help="Name of the dataset config (e.g. 'humaneval' or 'mbpp')")
@@ -62,7 +66,7 @@ if __name__ == "__main__":
     # 🔄 Benchmark starten
     model_results = run_benchmark(config, args.models, num_samples=args.samples)
 
-    all_dataframes = []
+    conn = sqlite3.connect(db_path)
 
     for model_name, results in model_results.items():
         df = pd.DataFrame(results)
@@ -71,16 +75,14 @@ if __name__ == "__main__":
         for col in df.columns:
             df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, list) else x)
 
-        all_dataframes.append(df)
-
+        # Export als CSV
         csv_path = os.path.join(csv_folder, f"{args.dataset}_{model_name}.csv")
         df.to_csv(csv_path, index=False)
-
         print(f"✅ Saved {len(df)} results to 📄 {csv_path}")
 
-    # ✨ Gesamttabelle für die Datenbank
-    combined_df = pd.concat(all_dataframes, ignore_index=True)
-    conn = sqlite3.connect(db_path)
-    combined_df.to_sql("results", conn, if_exists="replace", index=False)
+        # Export in eigene Tabelle für Modell
+        table_name = f"{model_name}_results"
+        df.to_sql(table_name, conn, if_exists="replace", index=False)
+        print(f"🗃️  Saved to DB table: {table_name}")
 
-    print(f"\n🗃️  Combined DB written to: {db_path}")
+    conn.close()
