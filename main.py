@@ -3,6 +3,9 @@ import json
 import argparse
 import sqlite3
 import pandas as pd
+import time
+import importlib
+from common.query import query
 
 
 def load_local_dataset(json_path):
@@ -10,36 +13,41 @@ def load_local_dataset(json_path):
         return json.load(f)
 
 
-from common.query import query
-import importlib
-
-
-def run_benchmark(dataset_config, models, num_samples=10):
-    model_results = {}
+def run_benchmark(dataset_config, model_name, num_samples=10):
     dataset_path = os.path.join("dataset_configs", "local_data", f"{dataset_config.DATASET_NAME}.json")
     dataset = load_local_dataset(dataset_path)
+    results = []
 
-    for model_name in models:
-        print(f"\n▶ Running model: {model_name}")
-        results = []
-        for i in range(num_samples):
-            sample = dataset[i]
-            prompt = dataset_config.PROMPT_TEMPLATE.format(
-                task_prompt=sample[dataset_config.FIELDS["text"]]
-            )
-            output = query(prompt, model=model_name)
+    print(f"\n▶ Running model: {model_name}")
+    start_time = time.time()
 
-            row = {
-                "task_id": sample[dataset_config.FIELDS["task_id"]],
-                "prompt": prompt,
-                "canonical_solution": sample[dataset_config.FIELDS["solution"]],
-                "test_code": sample[dataset_config.FIELDS["test"]],
-                "model_output": output,
-                "model_name": model_name
-            }
-            results.append(row)
-        model_results[model_name] = results
-    return model_results
+    for i in range(num_samples):
+        sample = dataset[i]
+        prompt = dataset_config.PROMPT_TEMPLATE.format(
+            task_prompt=sample[dataset_config.FIELDS["text"]]
+        )
+        output = query(prompt, model=model_name)
+
+        row = {
+            "task_id": sample[dataset_config.FIELDS["task_id"]],
+            "prompt": prompt,
+            "canonical_solution": sample[dataset_config.FIELDS["solution"]],
+            "test_code": sample[dataset_config.FIELDS["test"]],
+            "model_output": output,
+            "model_name": model_name
+        }
+        results.append(row)
+
+    end_time = time.time()
+    total_time = round(end_time - start_time, 2)
+
+    print(f"🕒 {model_name} took {total_time} seconds for {num_samples} samples")
+
+    # Zeit zu jedem Datensatz hinzufügen
+    for row in results:
+        row["time"] = total_time
+
+    return results
 
 
 if __name__ == "__main__":
@@ -63,12 +71,10 @@ if __name__ == "__main__":
     os.makedirs(db_folder, exist_ok=True)
     db_path = os.path.join(db_folder, f"{args.dataset}.db")
 
-    # 🔄 Benchmark starten
-    model_results = run_benchmark(config, args.models, num_samples=args.samples)
-
     conn = sqlite3.connect(db_path)
 
-    for model_name, results in model_results.items():
+    for model_name in args.models:
+        results = run_benchmark(config, model_name, num_samples=args.samples)
         df = pd.DataFrame(results)
 
         # 🔧 Listen zu Strings konvertieren, damit SQLite sie akzeptiert
