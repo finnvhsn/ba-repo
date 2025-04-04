@@ -23,25 +23,44 @@ def run_benchmark(dataset_config, model_name, num_samples=10):
 
     for i in range(num_samples):
         sample = dataset[i]
-        prompt = dataset_config.PROMPT_TEMPLATE.format(
-            task_prompt=sample[dataset_config.FIELDS["text"]]
-        )
+
+        try:
+            key_text = dataset_config.FIELDS["text"]
+            if key_text not in sample:
+                print(f"❌ Sample {i} missing expected key: '{key_text}'")
+                print("🔍 Sample keys:", list(sample.keys()))
+                continue
+
+            task_text = sample[key_text]
+            prompt = dataset_config.PROMPT_TEMPLATE.format(text=task_text)
+        except Exception as e:
+            print(f"❌ Error in sample {i}: {e}")
+            print("🔍 Sample content:", sample)
+            continue
+
         output = query(prompt, model=model_name)
 
-        row = {
-            "task_id": sample[dataset_config.FIELDS["task_id"]],
-            "prompt": prompt,
-            "canonical_solution": sample[dataset_config.FIELDS["solution"]],
-            "test_code": sample[dataset_config.FIELDS["test"]],
-            "model_output": output,
-            "model_name": model_name
-        }
+        try:
+            row = {
+                "task_id": sample[dataset_config.FIELDS["task_id"]],
+                "prompt": prompt,
+                "canonical_solution": sample[dataset_config.FIELDS["solution"]],
+                "test_code": ("\n".join(sample[dataset_config.FIELDS["test"]])
+                              if isinstance(sample[dataset_config.FIELDS["test"]], list)
+                              else sample[dataset_config.FIELDS["test"]]),
+                "model_output": output,
+                "model_name": model_name
+            }
+        except KeyError as e:
+            print(f"❌ KeyError while building row in sample {i}: {e}")
+            continue
+
         results.append(row)
+        print(f"✅ Sample {i + 1}/{num_samples} completed")
 
     end_time = time.time()
     total_time = round(end_time - start_time, 2)
-
-    print(f"🕒 {model_name} took {total_time} seconds for {num_samples} samples")
+    print(f"🕒 {model_name} took {total_time} seconds for {len(results)} completed samples")
 
     # Zeit zu jedem Datensatz hinzufügen
     for row in results:

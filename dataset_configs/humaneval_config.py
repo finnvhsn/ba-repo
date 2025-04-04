@@ -3,7 +3,7 @@ SPLIT = "test"
 PROMPT_TEMPLATE = """
 You are a Python expert. Your task is to implement a Python function that solves the task below.
 
-{task_prompt}
+{text}
 
 Instructions:
 - Write only valid Python code.

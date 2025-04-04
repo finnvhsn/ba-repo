@@ -10,12 +10,12 @@ def list_tables(conn):
 
 def delete_table(conn, table_name):
     cursor = conn.cursor()
-    cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+    cursor.execute(f'DROP TABLE IF EXISTS "{table_name}"')
     print(f"🗑️  Tabelle '{table_name}' gelöscht.")
 
 def clear_table_contents(conn, table_name):
     cursor = conn.cursor()
-    cursor.execute(f"DELETE FROM {table_name}")
+    cursor.execute(f'DELETE FROM "{table_name}"')
     print(f"🧹 Inhalte aus Tabelle '{table_name}' gelöscht.")
 
 if __name__ == "__main__":
@@ -26,7 +26,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    db_path = os.path.join("dataset_configs", "databases", args.db)
+    # Absoluten Pfad zur Datenbank berechnen (relativ zum Skript-Standort)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(script_dir, args.db)
+
     if not os.path.exists(db_path):
         print(f"❌ Datenbank nicht gefunden: {db_path}")
         exit(1)
@@ -45,5 +48,3 @@ if __name__ == "__main__":
 
     conn.commit()
     conn.close()
-
-

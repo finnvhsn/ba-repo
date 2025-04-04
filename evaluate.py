@@ -25,12 +25,17 @@ def run_code(q, full_code):
 def clean_model_output(code: str) -> str:
     code = code.strip()
 
-    # Entferne führende und abschließende Markdown- oder Docstring-Blöcke
-    code = re.sub(r'^("""|\'\'\'|```)\n?', '', code)
-    code = re.sub(r'\n?("""|\'\'\'|```)$', '', code)
-    code = re.sub(r'("""|\'\'\'|```)', '', code)
+    # Entferne alle ```-Blöcke vollständig
+    code = re.sub(r"```(?:python)?\n?", "", code, flags=re.IGNORECASE)
+    code = re.sub(r"\n?```", "", code)
+
+    # Entferne ggf. auch übrig gebliebene """ oder ''' (selten, aber sicherheitshalber)
+    code = re.sub(r'^("""|\'\'\')\n?', '', code)
+    code = re.sub(r'\n?("""|\'\'\')$', '', code)
+    code = re.sub(r'("""|\'\'\')', '', code)
 
     return code.strip()
+
 
 # 🔹 Funktion umbenennen in "candidate"
 def rename_to_candidate(code: str) -> str:
@@ -71,17 +76,25 @@ def safe_exec(full_code, timeout=3.0):
         return "error: timeout"
     return q.get() if not q.empty() else "error: unknown"
 
+def extract_function_name(code: str) -> str:
+    match = re.search(r"def\s+(\w+)\s*\(", code)
+    return match.group(1) if match else "unknown_function"
+
+
 # 🔹 Gesamte Auswertung pro Modell-Ausgabe
 def evaluate_model_output(model_output, test_code, timeout=3.0):
     prelude = "from typing import List, Dict, Tuple, Optional, Any\n"
     model_output = clean_model_output(model_output)
     model_output = remove_function_docstrings(model_output)
+
+    original_name = extract_function_name(model_output)
+    test_code = re.sub(r'\b' + re.escape(original_name) + r'\b', 'candidate', test_code)
+
     model_output = rename_to_candidate(model_output)
-    
-    #print("🔍 Cleaned model output:\n", model_output)
-    
+
     full_code = prelude + "\n" + model_output + "\n" + test_code
     return safe_exec(full_code, timeout=timeout)
+
 
 # 🔹 Hauptausführung
 if __name__ == "__main__":
