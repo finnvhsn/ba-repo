@@ -15,13 +15,13 @@ llama 3.3 70.6b URL: https://ollama.com/library/llama3.3:latest
 Temperature: 0.0
 
 for pulling models:
-bash: curl http://10.1.25.121:11434/api/pull -d '{ "model": "qwen2.5-coder:7b" }' -H "Content-Type: application/json"
+bash: curl http://10.1.25.121:11434/api/pull -d '{ "model": "deepseek-llm:7b" }' -H "Content-Type: application/json"
 
 
 models pulled:
 deepseek-coder:6.7b
 codegemma:7b
-deepseek-r1:7b
+deepseek-llm:7b
 qwen2.5:7b
 qwen2.5-coder:7b
 
@@ -33,13 +33,17 @@ curl -X DELETE http://10.1.25.121:11434/api/delete -d '{ "model": "deepseek-r1:7
 
 direkter zugriff:
 curl http://10.1.25.121:11434/api/generate -d '{
-  "model": "mistral:7b",
+  "model": "deepseek-llm:7b",
   "prompt": "write a python function that defies prime numbers in the range of 1 to 10",
-  "temperature": 0.2
+  "temperature": 0.0
 }'
 
 Show all listed ollama models:
 bash: curl http://10.1.25.121:11434/api/tags
+
+ping 10.1.25.121
+
+curl http://10.1.25.121:11434
 
 
 delete table in db:
