@@ -48,3 +48,8 @@ curl http://10.1.25.121:11434
 
 delete table in db:
 python db_commun.py --db humaneval.db --table "starcoder2:7b_results" --drop
+
+
+
+IMPORTANT: to view datasets, please open project in IDE. the database files are currently to big to be visualised in github.
+

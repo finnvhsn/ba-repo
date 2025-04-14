@@ -14,7 +14,7 @@ sorted_anzahlen, sorted_benchmarks = zip(*sorted_data)
 
 # Diagramm erstellen
 plt.figure(figsize=(14, 6))
-bars = plt.bar(sorted_benchmarks, sorted_anzahlen, color="orange")
+bars = plt.bar(sorted_benchmarks, sorted_anzahlen, color="lightblue")
 
 # Werte unter die Balken schreiben
 for bar, wert in zip(bars, sorted_anzahlen):
