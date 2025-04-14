@@ -21,8 +21,6 @@ datasets/
 *.parquet
 
 # Local dev files
-*.db
-*.sqlite3
 *.csv
 *.html
 
