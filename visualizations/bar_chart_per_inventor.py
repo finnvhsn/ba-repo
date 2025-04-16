@@ -8,7 +8,8 @@ labels = [
     "QwenCoder 2.5", "Qwen 2.5",         # Alibaba
     "WizardCoder", "Mistral"             # ohne Pendant
 ]
-values = [47.56, 29.27, 28.05, 50.0, 60.37, 25.0, 79.27, 75.0, 31.10, 31.71]
+values = [46.95, 28.66, 27.44, 49.39, 59.76, 24.39, 78.66, 74.39, 30.49, 31.10]
+
 
 # Farben zuordnen (blau für CM, grau für GM)
 colors = [

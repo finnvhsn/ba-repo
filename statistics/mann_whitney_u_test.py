@@ -1,8 +1,8 @@
 from scipy.stats import mannwhitneyu
 
 # Gruppenwerte (pass@1 in Prozent)
-cm_values = [47.56, 28.05, 60.37, 79.27, 31.10]  # Coding-Modelle
-gm_values = [29.27, 50.0, 25.0, 75.0, 31.71]     # Generalistische Modelle
+cm_values = [46.95, 27.44, 59.76, 78.66, 30.49]  # Coding-Modelle
+gm_values = [28.66, 49.39, 24.39, 74.39, 31.10]  # Generalistische Modelle
 
 # Mann-Whitney-U-Test durchführen (zweiseitig)
 stat, p_value = mannwhitneyu(cm_values, gm_values, alternative='two-sided')

@@ -5,7 +5,7 @@ labels = [
     "QwenCoder 2.5", "DeepSeek-Coder", "CodeGemma", "WizardCoder", "CodeLLaMA",  # CM
     "Qwen 2.5", "LLaMA 3", "Mistral", "Gemma", "DeepSeek-LLM"                    # GM
 ]
-values = [79.27, 60.37, 47.56, 31.10, 28.05, 75.0, 50.0, 31.71, 29.27, 25.0]
+values = [78.66, 59.76, 46.95, 30.49, 27.44, 74.39, 49.39, 31.10, 28.66, 24.39]
 
 # Farbzuordnung pro Gruppe
 colors = ['lightblue'] * 5 + ['lightgrey'] * 5

@@ -6,7 +6,7 @@ labels = [
     "CodeGemma", "CodeLLaMA", "DeepSeek-Coder", "DeepSeek-LLM", "Gemma",
     "LLaMA 3", "Mistral", "QwenCoder 2.5", "Qwen 2.5", "WizardCoder"
 ]
-values = [47.56, 28.05, 60.37, 25.0, 29.27, 50.0, 31.71, 79.27, 75.0, 31.10]
+values = [46.95, 27.44, 59.76, 24.39, 28.66, 49.39, 31.10, 78.66, 74.39, 30.49]
 
 # Farben zuweisen: bestimmte Modelle lightgrey
 grey_models = {"Gemma", "LLaMA 3", "DeepSeek-LLM", "Mistral", "Qwen 2.5"}
