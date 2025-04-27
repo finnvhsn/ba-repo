@@ -29,6 +29,10 @@ Lokaler Ollama-Server: vertraulich
 
 Temperatureinstellung: 0.0
 
+## Hinweis zur Ansicht der Testdaten:
+
+Die Ergebnisse der Modelle sind in lokalen SQLite-Datenbanken gespeichert. Aufgrund der hohen Datenmenge können diese nicht direkt über GitHub eingesehen werden. Um die Daten anzuzeigen, sollte das Projekt lokal in Visual Studio Code geöffnet und eine geeignete SQL-Erweiterung (z. B. "SQLite Viewer") installiert werden, um die Datenbanken in Tabellenform durchsuchen zu können.
+
 ## Projektstruktur:
 
 | Ordner / Datei                | Beschreibung |
