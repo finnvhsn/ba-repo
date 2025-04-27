@@ -6,11 +6,10 @@ Experimentelle Evaluierung spezialisierter und generalistischer Large Language M
 
 Finn Luis von Heesen
 
+## Kurzbeschreibung des Experiments:
 
 Dieses Repository dient der Durchführung eines kontrollierten Laborexperiments, bei dem verschiedene spezialisierte Coding-Modelle und generalistische Sprachmodelle im Hinblick auf ihre Leistungsfähigkeit in der funktionalen Codegenerierung verglichen werden.
 Getestet wurden die Modelle unter standardisierten Bedingungen auf einem lokalen Ollama-Server.
-
-## Kurzbeschreibung des Experiments:
 
 Im Rahmen des Experiments wurden zehn Large Language Models mit dem HumanEval-Datensatz getestet.
 Es wurden jeweils fünf für Coding-Aufgaben feinabgestimmte bzw. generalistische Modelle getestet.
