@@ -1,8 +1,8 @@
 import numpy as np
 
-# Gruppenwerte (pass@1 in Prozent)
-cm_values = [46.95, 27.44, 59.76, 78.66, 30.49]  # Coding-Modelle
-gm_values = [28.66, 49.39, 24.39, 74.39, 31.10]  # Generalistische Modelle
+
+cm_values = [46.95, 27.44, 59.76, 78.66, 30.49]  
+gm_values = [28.66, 49.39, 24.39, 74.39, 31.10] 
 
 std_cm = np.std(cm_values, ddof=1) 
 std_gm = np.std(gm_values, ddof=1)

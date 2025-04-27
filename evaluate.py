@@ -5,7 +5,7 @@ import pandas as pd
 import multiprocessing
 import re
 
-# 🔹 Hilfsfunktion zum sicheren Ausführen von Code
+
 def run_code(q, full_code):
     try:
         local_ns = {}
@@ -21,15 +21,15 @@ def run_code(q, full_code):
     except Exception as e:
         q.put(f"error: {type(e).__name__}")
 
-# 🔹 Model Output bereinigen
+
 def clean_model_output(code: str) -> str:
     code = code.strip()
 
-    # Entferne alle ```-Blöcke vollständig
+  
     code = re.sub(r"```(?:python)?\n?", "", code, flags=re.IGNORECASE)
     code = re.sub(r"\n?```", "", code)
 
-    # Entferne ggf. auch übrig gebliebene """ oder ''' (selten, aber sicherheitshalber)
+   
     code = re.sub(r'^("""|\'\'\')\n?', '', code)
     code = re.sub(r'\n?("""|\'\'\')$', '', code)
     code = re.sub(r'("""|\'\'\')', '', code)
@@ -37,7 +37,7 @@ def clean_model_output(code: str) -> str:
     return code.strip()
 
 
-# 🔹 Funktion umbenennen in "candidate"
+
 def rename_to_candidate(code: str) -> str:
     return re.sub(r"def\s+\w+\s*\(", "def candidate(", code, count=1)
 
@@ -62,10 +62,10 @@ def remove_function_docstrings(code: str) -> str:
         return ast.unparse(tree)
     except Exception as e:
         print(f"⚠️ AST-Parsing failed: {e}")
-        return code  # Fallback
+        return code  
 
 
-# 🔹 Sicherer Code-Ausführung mit Timeout
+
 def safe_exec(full_code, timeout=3.0):
     q = multiprocessing.Queue()
     p = multiprocessing.Process(target=run_code, args=(q, full_code))
@@ -81,7 +81,7 @@ def extract_function_name(code: str) -> str:
     return match.group(1) if match else "unknown_function"
 
 
-# 🔹 Gesamte Auswertung pro Modell-Ausgabe
+
 def evaluate_model_output(model_output, test_code, timeout=3.0):
     prelude = "from typing import List, Dict, Tuple, Optional, Any\n"
     model_output = clean_model_output(model_output)
@@ -96,7 +96,7 @@ def evaluate_model_output(model_output, test_code, timeout=3.0):
     return safe_exec(full_code, timeout=timeout)
 
 
-# 🔹 Hauptausführung
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate LLM outputs for a given dataset.")
     parser.add_argument("--dataset", type=str, required=True, help="Dataset name (e.g. humaneval or mbpp)")
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     df["test_result"] = results
 
-    # Tabelle aktualisieren
+  
     df.to_sql(table_name, conn, if_exists="replace", index=False)
     conn.close()
 

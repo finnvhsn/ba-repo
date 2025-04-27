@@ -26,7 +26,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    # Absoluten Pfad zur Datenbank berechnen (relativ zum Skript-Standort)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(script_dir, args.db)
 

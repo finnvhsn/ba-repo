@@ -62,7 +62,7 @@ def run_benchmark(dataset_config, model_name, num_samples=10):
     total_time = round(end_time - start_time, 2)
     print(f"🕒 {model_name} took {total_time} seconds for {len(results)} completed samples")
 
-    # Zeit zu jedem Datensatz hinzufügen
+
     for row in results:
         row["time"] = total_time
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         print(f"❌ Dataset config '{args.dataset}_config.py' not found in dataset_configs/")
         exit(1)
 
-    # 🔸 Ergebnisverzeichnisse vorbereiten
+
     csv_folder = os.path.join("dataset_configs", "exports")
     os.makedirs(csv_folder, exist_ok=True)
     db_folder = os.path.join("dataset_configs", "databases")
@@ -96,16 +96,16 @@ if __name__ == "__main__":
         results = run_benchmark(config, model_name, num_samples=args.samples)
         df = pd.DataFrame(results)
 
-        # 🔧 Listen zu Strings konvertieren, damit SQLite sie akzeptiert
+  
         for col in df.columns:
             df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, list) else x)
 
-        # Export als CSV
+       
         csv_path = os.path.join(csv_folder, f"{args.dataset}_{model_name}.csv")
         df.to_csv(csv_path, index=False)
         print(f"✅ Saved {len(df)} results to 📄 {csv_path}")
 
-        # Export in eigene Tabelle für Modell
+      
         table_name = f"{model_name}_results"
         df.to_sql(table_name, conn, if_exists="replace", index=False)
         print(f"🗃️  Saved to DB table: {table_name}")
