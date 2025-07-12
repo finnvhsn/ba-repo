@@ -1,7 +1,7 @@
 import requests
 import json
 
-def query(prompt, model="deepseek-coder:6.7b", ip_address="10.1.25.121"):
+def query(prompt, model="deepseek-coder:6.7b", ip_address=""):
     chat_content = [{"role": "user", "content": prompt}]
     payload = {
         "model": model,
