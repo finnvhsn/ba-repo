@@ -21,8 +21,6 @@ Alle Modellantworten wurden gespeichert, automatisiert evaluiert und in lokalen 
 
 ## Lokale Infrastruktur:
 
-Die Modelle wurden von einem Server des IT-Unternehmens Hewlett Packard Enterprise aufgerufen.
-
 Virtual Maschine GPU: NVIDIA L40S (48 GB)
 
 Lokaler Ollama-Server: vertraulich
